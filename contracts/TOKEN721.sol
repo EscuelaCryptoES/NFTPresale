@@ -13,8 +13,8 @@ contract NOMBRETOKEN is ERC721A, Pausable, ReentrancyGuard, Ownable {
     Counters.Counter private _tokenIdCounter;
 
     uint256 constant maxTokensPerBuy = 25;
-    uint256 constant totalTokens = 10101;
-    uint256 private teamTokenMaxAmount = 350;
+    uint256 constant totalTokens = 10100;
+    uint256 constant private teamTokenMaxAmount = 350;
     uint256 private teamTokenMinted;
     uint256 private tokensSold;
 
@@ -58,6 +58,13 @@ contract NOMBRETOKEN is ERC721A, Pausable, ReentrancyGuard, Ownable {
         _unpause();
     }
 
+    function addPhase(uint256[] calldata _phase, uint256[] calldata _price, uint256[] calldata _maxRange) public onlyOwner{
+        for(uint256 i = 0; i < _phase.length; i++){
+            pricePerPhase[_phase[i]] = _price[i];
+            maxRangePerPhase[_phase[i]] = _maxRange[i];
+        } 
+    }
+
     function setPricePerPhase(uint256 _phase, uint256 _price) public onlyOwner{
         pricePerPhase[_phase] = _price;
     }
@@ -70,8 +77,10 @@ contract NOMBRETOKEN is ERC721A, Pausable, ReentrancyGuard, Ownable {
         numPhases = _numPhases;
     }
 
-    function addUserToWhiteList(address _user) public onlyOwner{
-        whiteList[_user] = true;
+    function addUserToWhiteList(address[] calldata _user) public onlyOwner{
+        for(uint256 i = 0; i < _user.length; i++){
+            whiteList[_user[i]] = true;
+        }
     }
 
     function removeUserFromWhiteList(address _user) public onlyOwner{
